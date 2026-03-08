@@ -3,6 +3,7 @@
 {% set active = 'clock' %}
 {% block title %}– Clock{% endblock %}
 {% block extra_style %}
+<style>
 .live-time { font-family: 'DM Mono', monospace; font-size: 3rem; font-weight: 500;
   color: var(--accent); letter-spacing: 2px; margin: 8px 0 4px; }
 .live-date { font-family: 'DM Mono', monospace; font-size: 0.8rem;
@@ -21,6 +22,7 @@
 .elapsed { font-family: 'DM Mono', monospace; font-size: 0.85rem;
   color: var(--text-muted); margin-top: 10px; }
 .elapsed span { color: var(--accent); }
+  </style>
 {% endblock %}
 {% block content %}
 <div style="padding:20px;">

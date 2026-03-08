@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% set show_nav = true %}
+{% set active = 'manual' %}
+{% block title %}– Manual Entry{% endblock %}
+{% block content %}
+<div style="padding:20px;">
+  <div class="section-title">Manual Time Entry</div>
+  <div class="card">
+    {% if error %}<div class="error-msg">{{ error }}</div>{% endif %}
+    <form method="POST">
+      <label>Date</label>
+      <input type="date" name="date" value="{{ today }}" required>
+      <label>Work Type</label>
+      <select name="type">
+        <option>Regular</option>
+        <option>Overtime</option>
+        <option>Holiday</option>
+        <option>Sick</option>
+        <option>Vacation</option>
+      </select>
+      <div class="form-row">
+        <div>
+          <label>Start Time</label>
+          <input type="time" name="start_time" required>
+        </div>
+        <div>
+          <label>End Time</label>
+          <input type="time" name="end_time" required>
+        </div>
+      </div>
+      <label>Notes (optional)</label>
+      <textarea name="notes" placeholder="Job site, tasks, etc."></textarea>
+      <button type="submit" class="btn btn-primary">Add Entry</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

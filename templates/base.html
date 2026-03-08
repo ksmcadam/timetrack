@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TimeTrack {% block title %}{% endblock %}</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0f0f; --surface: #1a1a1a; --surface2: #242424;
+    --border: #2e2e2e; --accent: #c8f55a; --accent-dim: #a0c440;
+    --text: #f0f0f0; --text-muted: #888; --danger: #ff5a5a; --radius: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif;
+         min-height: 100vh; max-width: 480px; margin: 0 auto; padding: 0 0 100px; }
+  .app-header { padding: 28px 20px 20px; display: flex; align-items: center;
+    justify-content: space-between; border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; background: var(--bg); z-index: 100; }
+  .logo { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; text-decoration: none; color: var(--text); }
+  .logo span { color: var(--accent); }
+  .user-badge { font-family: 'DM Mono', monospace; font-size: 0.75rem;
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 5px 10px; border-radius: 99px; color: var(--text-muted);
+    text-decoration: none; }
+  .user-badge:hover { border-color: var(--accent); color: var(--accent); }
+  label { display: block; font-size: 0.78rem; color: var(--text-muted);
+    font-family: 'DM Mono', monospace; text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 6px; }
+  input, select, textarea { width: 100%; background: var(--surface2);
+    border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px;
+    color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.95rem;
+    outline: none; transition: border 0.2s; margin-bottom: 16px; }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+  textarea { resize: vertical; min-height: 70px; }
+  select option { background: var(--surface2); }
+  .btn { width: 100%; padding: 14px; border-radius: 10px; border: none;
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem;
+    cursor: pointer; transition: all 0.15s; letter-spacing: 0.3px; display: flex;
+    align-items: center; justify-content: center; gap: 8px; }
+  .btn-primary { background: var(--accent); color: #0f0f0f; }
+  .btn-primary:hover { background: var(--accent-dim); transform: translateY(-1px); }
+  .btn-danger { background: transparent; border: 1px solid var(--danger); color: var(--danger); margin-top: 8px; }
+  .btn-danger:hover { background: var(--danger); color: #fff; }
+  .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); margin-top: 8px; }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-sm { padding: 6px 12px; font-size: 0.8rem; width: auto; border-radius: 7px; }
+  .card { background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
+  .section-title { font-size: 0.7rem; font-family: 'DM Mono', monospace;
+    text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 12px; }
+  .error-msg { background: #2a1a1a; border: 1px solid #4a2a2a; color: var(--danger);
+    padding: 10px 14px; border-radius: 8px; font-size: 0.85rem;
+    font-family: 'DM Mono', monospace; margin-bottom: 16px; }
+  .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 100%; max-width: 480px; background: var(--surface);
+    border-top: 1px solid var(--border); display: flex; padding: 10px 0 20px; z-index: 200; }
+  .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center;
+    gap: 4px; cursor: pointer; padding: 8px 0; border: none; background: none;
+    color: var(--text-muted); font-family: 'Syne', sans-serif; font-size: 0.65rem;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+    transition: color 0.15s; text-decoration: none; }
+  .nav-item svg { width: 22px; height: 22px; stroke-width: 1.8; }
+  .nav-item.active { color: var(--accent); }
+  .nav-item:hover { color: var(--text); }
+  .entry-row { background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 16px; display: flex; align-items: center;
+    justify-content: space-between; margin-bottom: 8px; }
+  .entry-date { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 3px; }
+  .entry-name { font-weight: 600; font-size: 0.95rem; }
+  .entry-type { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--text-muted); }
+  .entry-hours { font-family: 'DM Mono', monospace; font-size: 1.3rem; font-weight: 500;
+    color: var(--accent); text-align: right; }
+  .entry-hours small { display: block; font-size: 0.65rem; color: var(--text-muted); }
+  .delete-btn { background: none; border: none; color: var(--text-muted); cursor: pointer;
+    font-size: 1rem; padding: 4px 6px; border-radius: 6px; margin-left: 10px; transition: color 0.15s; }
+  .delete-btn:hover { color: var(--danger); }
+  .summary-bar { background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px 20px; display: flex;
+    justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .summary-label { font-size: 0.78rem; color: var(--text-muted); font-family: 'DM Mono', monospace; }
+  .summary-value { font-size: 1.6rem; font-weight: 800; color: var(--accent); }
+  .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted);
+    font-family: 'DM Mono', monospace; font-size: 0.85rem; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 99px;
+    font-size: 0.7rem; font-family: 'DM Mono', monospace; }
+  .badge-green { background: #1a2a1a; color: var(--accent); border: 1px solid #2a4a2a; }
+  .badge-red   { background: #2a1a1a; color: var(--danger); border: 1px solid #4a2a2a; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  p.screen-pad { padding: 20px; }
+</style>
+{% block extra_style %}{% endblock %}
+</head>
+<body>
+
+{% if show_nav %}
+<div class="app-header">
+  <a href="/" class="logo">Time<span>Track</span></a>
+  <a href="/logout" class="user-badge">{{ emp_name }} · logout</a>
+</div>
+
+{% if not is_admin %}
+<nav class="bottom-nav">
+  <a href="/clock" class="nav-item {% if active == 'clock' %}active{% endif %}">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    Clock
+  </a>
+  <a href="/manual" class="nav-item {% if active == 'manual' %}active{% endif %}">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+    Manual
+  </a>
+  <a href="/history" class="nav-item {% if active == 'history' %}active{% endif %}">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    History
+  </a>
+</nav>
+{% endif %}
+{% endif %}
+
+{% block content %}{% endblock %}
+
+</body>
+</html>

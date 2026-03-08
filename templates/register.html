@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}– Register{% endblock %}
+{% block content %}
+<div style="padding:20px;max-width:400px;margin:0 auto;padding-top:40px;">
+  <h2 style="font-size:1.5rem;font-weight:800;margin-bottom:4px;">Create Account</h2>
+  <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:24px;">Register as a new employee</p>
+  {% if error %}<div class="error-msg">{{ error }}</div>{% endif %}
+  <form method="POST">
+    <label>Full Name</label>
+    <input type="text" name="name" placeholder="e.g. Jane Doe" required>
+    <label>Job Title</label>
+    <input type="text" name="title" placeholder="e.g. Technician">
+    <label>Set a 4-Digit PIN</label>
+    <input type="password" name="pin" placeholder="••••" maxlength="4" inputmode="numeric" required>
+    <label>Confirm PIN</label>
+    <input type="password" name="pin2" placeholder="••••" maxlength="4" inputmode="numeric" required>
+    <button type="submit" class="btn btn-primary">Create Account</button>
+  </form>
+  <a href="/login"><button class="btn btn-outline">Back to Sign In</button></a>
+</div>
+{% endblock %}

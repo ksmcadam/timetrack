@@ -398,6 +398,7 @@ scheduler.add_job(scheduled_email, 'cron', hour=17, minute=0)  # 5pm daily check
 scheduler.start()
 
 # ── Run ───────────────────────────────────────────────────────────────────────
+init_db()
+
 if __name__ == '__main__':
-    init_db()
     app.run(debug=True)
